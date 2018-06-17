@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">YouTubeApp</string>
+    <string name="rewind">Rewind</string>
+    <string name="play">Play</string>
+    <string name="forward">Forward</string>
+    <string name="search">Search</string>
+    <string name="request_search">Please Search Videos🔍</string>
+</resources>
