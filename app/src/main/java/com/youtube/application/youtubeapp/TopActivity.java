@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class TopActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn;
-    Button btn;
+    Button btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
