@@ -31,7 +31,7 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
         btn = (Button)findViewById(R.id.play);
         btn.setOnClickListener(this);
 
-//        btn = findViewById(R.id.search);
+//        btn = findViewById(R.id.search);a
         btn.setOnClickListener(this);
     }
 
