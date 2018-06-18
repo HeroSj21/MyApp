@@ -16,7 +16,7 @@ import android.widget.Toast;
 public class TopActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn;
-    Button btn;
+    Button btn2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,8 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
         btn = (Button)findViewById(R.id.play);
         btn.setOnClickListener(this);
 
-//        btn = findViewById(R.id.search);
-        btn.setOnClickListener(this);
+        btn2 = (Button) findViewById(R.id.search);
+        btn2.setOnClickListener(this);
     }
 
     public boolean networkCheck(Context context){
@@ -60,11 +60,11 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
                 startActivity(intent);
                 finish();
                 break;
-//            case R.id.search:
-//                intent = new Intent(this, SearchVideoActivity.class);
-//                startActivity(intent);
-//                finish();
-//                break;
+            case R.id.search:
+                intent = new Intent(this, SearchVideoActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
     }
 }
