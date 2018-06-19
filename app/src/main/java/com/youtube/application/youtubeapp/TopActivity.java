@@ -13,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.util.HashMap;
+
 public class TopActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button btn;
@@ -57,6 +59,9 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.play:
                 intent = new Intent(this, YouTubePlayerActivity.class);
+                HashMap<String, String> map = new HashMap<>();
+                map.put(YouTubeKeys.KEY_VIDEO_ID, YouTubeKeys.SAMPLE_IDEO_ID);
+                intent.putExtra(YouTubeKeys.KEY_CHOSEN_VIDEO, map);
                 startActivity(intent);
                 finish();
                 break;
