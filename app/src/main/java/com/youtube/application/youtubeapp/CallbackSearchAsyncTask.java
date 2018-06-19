@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface CallbackSearchAsyncTask {
 
-//    void callbackSearchVideo(List<SearchResult> results);
-    void callbackSearchVideo(String results);
+    void callbackSearchVideo(List<SearchResult> results);
+//    void callbackSearchVideo(String results);
 
 }

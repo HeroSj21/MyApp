@@ -30,10 +30,13 @@ public class SearchVideoActivity extends AppCompatActivity implements SearchView
 
     private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
         @Override
-        public void callbackSearchVideo(String s) {
-            Toast.makeText(SearchVideoActivity.this, s, Toast.LENGTH_SHORT).show();
-
+        public void callbackSearchVideo(List<SearchResult> results) {
+            Toast.makeText(SearchVideoActivity.this, results.toString(), Toast.LENGTH_SHORT).show();
         }
+//        @Override
+//        public void callbackSearchVideo(String s) {
+//            Toast.makeText(SearchVideoActivity.this, s, Toast.LENGTH_SHORT).show();
+
     };
 
     @Override
