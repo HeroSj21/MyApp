@@ -11,6 +11,6 @@ public class YouTubeKeys {
     public static final String KEY_CHOSEN_VIDEO = "CHOSEN_VIDEO";
 
     public static final String LOG_YOUTUBE_PLAYER_ACTIVITY = YouTubePlayerActivity.class.getSimpleName();
-    public static final String LOG_RESULT_FRAGMENT = ResultListFragment.class.getSimpleName();
+    public static final String LOG_RESULT_FRAGMENT = VideoListFragment.class.getSimpleName();
 
 }

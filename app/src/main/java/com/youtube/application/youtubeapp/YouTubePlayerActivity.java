@@ -1,7 +1,7 @@
 package com.youtube.application.youtubeapp;
 
 
-
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -17,13 +17,15 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+import java.util.HashMap;
 
-//public class YouTubePlayerActivity extends YouTubeBaseActivity implements YouTubePlayer.OnInitializedListener, Toolbar.OnMenuItemClickListener ,SearchView.OnQueryTextListener{
 public class YouTubePlayerActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener, Toolbar.OnMenuItemClickListener {
 
-
     public static final String YOUTUBE_API_KEY = "AIzaSyA8QLCTtt_IboYB6ebIdchMk_e0aAJd1_o";
-    String VIDEO_ID = "kXYiU_JCYtU";
+    public static final String TAG = YouTubePlayerActivity.class.getSimpleName();
+
+    private String mVideo_ID;
+    private HashMap<String, String> mVideoInfo;
     private YouTubePlayer mYouTubePlayer = null;
     private Toolbar mToolbar;
     private int mPlayState;
@@ -51,6 +53,13 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        Intent intent = getIntent();
+        mVideoInfo = (HashMap<String, String>) intent.getSerializableExtra(YouTubeKeys.KEY_CHOSEN_VIDEO);
+
+        if (mVideoInfo != null) {
+            mVideo_ID = mVideoInfo.get(YouTubeKeys.KEY_VIDEO_ID);
+        }
         setContentView(R.layout.activity_you_tube_player);
 
         findView();
@@ -95,7 +104,7 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
 
             //loadVideo(String videoId, int timeMillis)
             //指定された動画の指定時間までシークして読み込んで再生します。
-            mYouTubePlayer.loadVideo(VIDEO_ID);
+            mYouTubePlayer.loadVideo(mVideo_ID);
         }
 
     }
