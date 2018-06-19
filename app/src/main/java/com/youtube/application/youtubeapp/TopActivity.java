@@ -31,8 +31,8 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
         btn = (Button)findViewById(R.id.play);
         btn.setOnClickListener(this);
 
-//        btn = findViewById(R.id.search);a
-        btn.setOnClickListener(this);
+        btn2 = (Button) findViewById(R.id.search);
+        btn2.setOnClickListener(this);
     }
 
     public boolean networkCheck(Context context){
