@@ -1,8 +1,9 @@
 package com.youtube.application.youtubeapp;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 
 import com.google.api.services.youtube.model.SearchResult;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class SearchVideoActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
@@ -30,8 +33,15 @@ public class SearchVideoActivity extends AppCompatActivity implements SearchView
 
     private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
         @Override
-        public void callbackSearchVideo(List<SearchResult> results) {
+        public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
             Toast.makeText(SearchVideoActivity.this, results.toString(), Toast.LENGTH_SHORT).show();
+            ResultListFragment resultListFragment = new ResultListFragment();
+            resultListFragment.setList(results);
+            mFragmentManager = getSupportFragmentManager();
+            mTransaction = mFragmentManager.beginTransaction();
+            mTransaction.remove(mRequestFragment);
+            mTransaction.replace(R.id.search_video, resultListFragment)
+                    .commit();
         }
 //        @Override
 //        public void callbackSearchVideo(String s) {
@@ -46,7 +56,7 @@ public class SearchVideoActivity extends AppCompatActivity implements SearchView
 
         mRequestFragment = new RequestSearchVideoFragment();
 
-        mFragmentManager = getFragmentManager();
+        mFragmentManager = getSupportFragmentManager();
         mTransaction = mFragmentManager.beginTransaction();
         mTransaction.replace(R.id.search_video, mRequestFragment)
                 .commit();

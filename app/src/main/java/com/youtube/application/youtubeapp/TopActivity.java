@@ -60,11 +60,11 @@ public class TopActivity extends AppCompatActivity implements View.OnClickListen
                 startActivity(intent);
                 finish();
                 break;
-//            case R.id.search:
-//                intent = new Intent(this, SearchVideoActivity.class);
-//                startActivity(intent);
-//                finish();
-//                break;
+            case R.id.search:
+                intent = new Intent(this, SearchVideoActivity.class);
+                startActivity(intent);
+                finish();
+                break;
         }
     }
 }

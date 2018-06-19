@@ -1,8 +1,10 @@
 package com.youtube.application.youtubeapp;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+
+
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -21,7 +23,7 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
 
 
     public static final String YOUTUBE_API_KEY = "AIzaSyA8QLCTtt_IboYB6ebIdchMk_e0aAJd1_o";
-    String VIDEO_ID = "i0p1bmr0EmE";
+    String VIDEO_ID = "kXYiU_JCYtU";
     private YouTubePlayer mYouTubePlayer = null;
     private Toolbar mToolbar;
     private int mPlayState;
@@ -63,7 +65,7 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
         mRequestFragment = new RequestSearchVideoFragment();
 
         //FragmentManager生成
-        FragmentManager manager = getFragmentManager();
+        FragmentManager manager = getSupportFragmentManager();
         // FragmentTransaction を開始
         FragmentTransaction transaction = manager.beginTransaction();
         // FragmentContainer のレイアウトに、 を割当てる

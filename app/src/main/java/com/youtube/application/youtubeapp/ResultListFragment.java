@@ -1,17 +1,28 @@
 package com.youtube.application.youtubeapp;
 
+
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
-public class ResultListFragment extends Fragment {
+import java.util.HashMap;
+import java.util.List;
 
-    View mView;
+public class ResultListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
-
+    private View mView;
+    private VideoListAdapter mAdapter;
+    private List<HashMap<String, String>> mVideoList;
+    private ListView mListView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,8 +32,30 @@ public class ResultListFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        super.onCreateView(inflater, container, savedInstanceState);
         mView = inflater.inflate(R.layout.search_result_listview, container, false);
-
+        mListView = (ListView)mView.findViewById(R.id.video_list);
+        mAdapter = new VideoListAdapter(getContext(), mVideoList);
+        mListView.setOnItemClickListener(this);
+        mListView.setAdapter(mAdapter);
         return mView;
+    }
+
+//    @Override
+//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+//
+//    }
+
+    public void setList(List<HashMap<String, String>> list){
+        mVideoList = list;
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        HashMap<String, String> videoInfo = mAdapter.getItem(i);
+//        Intent intent = new Intent();
+//        intent.putExtra(YouTubeKeys.KEY_CHOSEN_VIDEO, videoInfo);
+
+        Toast.makeText(getActivity(), videoInfo.get(YouTubeKeys.KEY_VIDEO_TITLE), Toast.LENGTH_SHORT).show();
     }
 }
