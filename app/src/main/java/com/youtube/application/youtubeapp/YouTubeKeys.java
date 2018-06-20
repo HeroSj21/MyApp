@@ -9,6 +9,7 @@ public class YouTubeKeys {
     public static final String KEY_VIDEO_THUMBNAILS = "THUMBNAILS";
 
     public static final String KEY_CHOSEN_VIDEO = "CHOSEN_VIDEO";
+    public static final String SAMPLE_IDEO_ID = "kXYiU_JCYtU";
 
     public static final String LOG_YOUTUBE_PLAYER_ACTIVITY = YouTubePlayerActivity.class.getSimpleName();
     public static final String LOG_RESULT_FRAGMENT = ResultListFragment.class.getSimpleName();
