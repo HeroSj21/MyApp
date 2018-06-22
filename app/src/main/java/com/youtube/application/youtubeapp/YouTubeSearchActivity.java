@@ -1,11 +1,10 @@
 package com.youtube.application.youtubeapp;
 
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -18,34 +17,31 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SearchVideoActivity extends AppCompatActivity implements SearchView.OnQueryTextListener{
+public class YouTubeSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
     private Toolbar mToolbar;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mTransaction;
     private RequestSearchVideoFragment mRequestFragment;
     private SearchView mSearchView;
-//    private Intent mSearchIntent;
-    //    private IntentFilter mIntentFilter;
-    private SearchVideoAsyncTask mSearchAsyncTask;
+    private VideoSearchAsyncTask mSearchAsyncTask;
     private List<SearchResult> mResultList;
-//    public VideoListReceiver mReceiver;
 
     private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
         @Override
         public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
-            Toast.makeText(SearchVideoActivity.this, results.toString(), Toast.LENGTH_SHORT).show();
-            ResultListFragment resultListFragment = new ResultListFragment();
-            resultListFragment.setList(results);
+            Toast.makeText(YouTubeSearchActivity.this, results.toString(), Toast.LENGTH_SHORT).show();
+            VideoListFragment videoListFragment = new VideoListFragment();
+            videoListFragment.setList(results);
             mFragmentManager = getSupportFragmentManager();
             mTransaction = mFragmentManager.beginTransaction();
             mTransaction.remove(mRequestFragment);
-            mTransaction.replace(R.id.search_video, resultListFragment)
+            mTransaction.replace(R.id.search_video, videoListFragment)
                     .commit();
         }
 //        @Override
 //        public void callbackSearchVideo(String s) {
-//            Toast.makeText(SearchVideoActivity.this, s, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(YouTubeSearchActivity.this, s, Toast.LENGTH_SHORT).show();
 
     };
 
@@ -65,8 +61,6 @@ public class SearchVideoActivity extends AppCompatActivity implements SearchView
         mToolbar.inflateMenu(R.menu.menu_search);
         setSupportActionBar(mToolbar);
 
-//        mSearchIntent = new Intent(this, SearchVideoActivity.class);
-//        mSearchIntent.setAction(YouTubeKeys.ACTION_SEARCH);
     }
 
     @Override
@@ -86,24 +80,13 @@ public class SearchVideoActivity extends AppCompatActivity implements SearchView
     @Override
     public boolean onQueryTextSubmit(String searchWord) {
         if (searchWord.equals("")) {
-            Toast.makeText(SearchVideoActivity.this, "Please Type Words!!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(YouTubeSearchActivity.this, "Please Type Words!!", Toast.LENGTH_SHORT).show();
         } else {
             //検索ボタンが呼ばれた時の処理
-//            Toast.makeText(SearchVideoActivity.this, "Start Search!!", Toast.LENGTH_SHORT).show();
-
-            mSearchAsyncTask = new SearchVideoAsyncTask();
+            mSearchAsyncTask = new VideoSearchAsyncTask();
             mSearchAsyncTask.setCallback(mCallBack);
             mSearchAsyncTask.setSearchWord(searchWord);
             mSearchAsyncTask.execute();
-
-//            mSearchIntent.putExtra(YouTubeKeys.SEARCH_WORD, searchWord);
-//            startService(mSearchIntent);
-//            mReceiver = new VideoListReceiver();
-//            mIntentFilter = new IntentFilter();
-//            mIntentFilter.addAction("UPDATE_ACTION");
-//            registerReceiver(mReceiver, mIntentFilter);
-//
-//            mReceiver.registerHandler(updateHandler);
         }
         return false;
     }

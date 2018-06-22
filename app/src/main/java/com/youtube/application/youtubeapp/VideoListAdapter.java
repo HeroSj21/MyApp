@@ -17,8 +17,9 @@ public class VideoListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<HashMap<String, String>> mVideoList;
+    private View mView;
 
-    public VideoListAdapter(Context context, List<HashMap<String, String>> list){
+    public VideoListAdapter(Context context, List<HashMap<String, String>> list) {
         Log.v(TAG, "Context - context = " + context);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mVideoList = list;
@@ -45,18 +46,20 @@ public class VideoListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View view, ViewGroup viewGroup) {
-        if (view == null) {
+        mView = view;
+        if (mView == null) {
             Log.v(TAG, "getView - View = null");
-            view = mInflater.inflate(R.layout.listview_icon, viewGroup, false);
-            Log.v(TAG, "getView - View = " +  view);
+            mView = mInflater.inflate(R.layout.listview_icon, viewGroup, false);
+            Log.v(TAG, "getView - View = " + mView);
         }
-        TextView titleText = (TextView) view.findViewById(R.id.video_title);
+        TextView titleText = (TextView) mView.findViewById(R.id.video_title);
+
         HashMap<String, String> videoInfo = getItem(position);
         String title = videoInfo.get(YouTubeKeys.KEY_VIDEO_TITLE);
 //        String thumbnail = videoInfo.get(YouTubeKeys.KEY_VIDEO_THUMBNAILS);
 
         titleText.setText(title);
 
-        return view;
+        return mView;
     }
 }

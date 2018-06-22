@@ -15,7 +15,7 @@ public class RequestSearchVideoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View view = (View)inflater.inflate(R.layout.request_serch_video, container, false);
+        View view = (View) inflater.inflate(R.layout.request_serch_video, container, false);
 
         TextView textView = (TextView) view.findViewById(R.id.search_request);
 

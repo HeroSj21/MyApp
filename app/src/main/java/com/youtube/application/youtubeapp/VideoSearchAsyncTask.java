@@ -18,7 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class SearchVideoAsyncTask extends AsyncTask<String, String, ArrayList<HashMap<String, String>>> {
+public class VideoSearchAsyncTask extends AsyncTask<String, String, ArrayList<HashMap<String, String>>> {
 
     private static final long NUMBER_OF_VIDEOS_RETURNED = 15;
     private final static int NUM_VIDEO_INFO = 3;
@@ -33,7 +33,7 @@ public class SearchVideoAsyncTask extends AsyncTask<String, String, ArrayList<Ha
     private List<SearchResult> mSearchResultList;
     private String mSearchWord;
 
-    static final String TAG = SearchVideoAsyncTask.class.getSimpleName();
+    static final String TAG = VideoSearchAsyncTask.class.getSimpleName();
 
     @Override
     protected void onPreExecute() {

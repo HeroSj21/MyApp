@@ -1,6 +1,7 @@
 package com.youtube.application.youtubeapp;
 
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,7 +18,7 @@ import android.widget.Toast;
 import java.util.HashMap;
 import java.util.List;
 
-public class ResultListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class VideoListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private View mView;
     private VideoListAdapter mAdapter;
@@ -41,10 +42,6 @@ public class ResultListFragment extends Fragment implements AdapterView.OnItemCl
         return mView;
     }
 
-//    @Override
-//    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-//
-//    }
 
     public void setList(List<HashMap<String, String>> list){
         mVideoList = list;
@@ -53,9 +50,10 @@ public class ResultListFragment extends Fragment implements AdapterView.OnItemCl
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         HashMap<String, String> videoInfo = mAdapter.getItem(i);
-//        Intent intent = new Intent();
-//        intent.putExtra(YouTubeKeys.KEY_CHOSEN_VIDEO, videoInfo);
-
+        Intent intent = new Intent(getActivity(), YouTubePlayerActivity.class);
+        intent.putExtra(YouTubeKeys.KEY_CHOSEN_VIDEO, videoInfo);
+        startActivity(intent);
+        getActivity().finish();
         Toast.makeText(getActivity(), videoInfo.get(YouTubeKeys.KEY_VIDEO_TITLE), Toast.LENGTH_SHORT).show();
     }
 }

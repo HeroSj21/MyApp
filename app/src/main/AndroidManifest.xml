@@ -20,8 +20,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".YouTubePlayerActivity" />
-        <!-- <activity android:name=".SearchVideoActivity" /> -->
-        <activity android:name=".SearchVideoActivity"></activity>
+        <!-- <activity android:name=".YouTubeSearchActivity" /> -->
+        <activity android:name=".YouTubeSearchActivity"></activity>
     </application>
 
 </manifest>
