@@ -1,15 +1,18 @@
 package com.youtube.application.youtubeapp;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class VideoListAdapter extends BaseAdapter {
 
@@ -17,12 +20,16 @@ public class VideoListAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private List<HashMap<String, String>> mVideoList;
+    private List<Bitmap> mBitmapList;
     private View mView;
+    private Bitmap mBitmap;
+    private ImageView mImageView;
 
-    public VideoListAdapter(Context context, List<HashMap<String, String>> list) {
+    public VideoListAdapter(Context context, List<HashMap<String, String>> list, List<Bitmap> bitmapList) {
         Log.v(TAG, "Context - context = " + context);
         mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mVideoList = list;
+        mBitmapList = bitmapList;
     }
 
 
@@ -53,12 +60,13 @@ public class VideoListAdapter extends BaseAdapter {
             Log.v(TAG, "getView - View = " + mView);
         }
         TextView titleText = (TextView) mView.findViewById(R.id.video_title);
-
-        HashMap<String, String> videoInfo = getItem(position);
+        mImageView = (ImageView) mView.findViewById(R.id.video_image);
+        mImageView.setImageResource(R.drawable.video_image);
+        Map<String, String> videoInfo = getItem(position);
         String title = videoInfo.get(StringContainer.KEY_VIDEO_TITLE);
-//        String thumbnail = videoInfo.get(StringContainer.KEY_VIDEO_THUMBNAILS);
 
         titleText.setText(title);
+        mImageView.setImageBitmap(mBitmapList.get(position));
 
         return mView;
     }

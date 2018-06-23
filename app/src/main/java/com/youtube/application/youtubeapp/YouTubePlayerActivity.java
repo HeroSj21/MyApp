@@ -2,6 +2,7 @@ package com.youtube.application.youtubeapp;
 
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -21,6 +22,7 @@ import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class YouTubePlayerActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener, Toolbar.OnMenuItemClickListener {
 
@@ -63,20 +65,29 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
 
     private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
         @Override
-        public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
+        public void callbackSearchVideo(List<HashMap<String, String>> results) {
             Log.v(TAG, "callbackSearchVideo == " + results);
-            VideoListFragment videoListFragment = new VideoListFragment();
-            videoListFragment.setList(results);
-            mFragmentManager = getSupportFragmentManager();
-            mTransaction = mFragmentManager.beginTransaction();
-            mTransaction.remove(mRequestFragment);
-            mTransaction.replace(R.id.container, videoListFragment)
-                    .commit();
+            mVideoListFragment = new VideoListFragment();
+            mVideoListFragment.setList(results);
+            getBitmap(results);
         }
 //        @Override
 //        public void callbackSearchVideo(String s) {
 //            Toast.makeText(YouTubeSearchActivity.this, s, Toast.LENGTH_SHORT).show();
 
+    };
+
+    private CallbackImageAsyncTask mCallbackImage = new CallbackImageAsyncTask() {
+        @Override
+        public void callbackImage(List<Bitmap> bitmap) {
+            Log.v(TAG, "callbackImage : " + bitmap.toString());
+            mVideoListFragment.setBitmapList(bitmap);
+            mFragmentManager = getSupportFragmentManager();
+            mTransaction = mFragmentManager.beginTransaction();
+            mTransaction.remove(mRequestFragment);
+            mTransaction.replace(R.id.container, mVideoListFragment)
+                    .commit();
+        }
     };
 
     @Override
@@ -107,27 +118,15 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
         mVideoListFragment = new VideoListFragment();
 
         setFragment(mRequestFragment);
-
-//        //FragmentManager生成
-//        mFragmentManager = getSupportFragmentManager();
-//        // FragmentTransaction を開始
-//        mTransaction = mFragmentManager.beginTransaction();
-//        // FragmentContainer のレイアウトに、 を割当てる
-//        mTransaction.replace(R.id.container, mRequestFragment)
-//                .addToBackStack(null)
-//                .commit();
-
     }
 
     private void findView() {
-//        YouTubePlayerView mPlayerView = (YouTubePlayerView) findViewById(R.id.youtube);
-//        mPlayerView.initialize(YOUTUBE_API_KEY, this);
         YouTubePlayerSupportFragment frag =
                 (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube);
         frag.initialize(YOUTUBE_API_KEY, this);
     }
 
-    private void setFragment(Fragment fragment){
+    private void setFragment(Fragment fragment) {
         //FragmentManager生成
         mFragmentManager = getSupportFragmentManager();
         // FragmentTransaction を開始
@@ -137,6 +136,18 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
         mTransaction.replace(R.id.container, fragment)
                 .addToBackStack(null)
                 .commit();
+    }
+
+    private void getBitmap(List<HashMap<String, String>> result) {
+        List<String> urlList = new ArrayList<>();
+        for (HashMap<String, String> map : result) {
+            String url = map.get(StringContainer.KEY_VIDEO_THUMBNAILS);
+            urlList.add(url);
+        }
+        ImageSearchAsyncTask imageSearchAsyncTask = new ImageSearchAsyncTask();
+        imageSearchAsyncTask.setCallback(mCallbackImage);
+        imageSearchAsyncTask.setUrlList(urlList);
+        imageSearchAsyncTask.execute();
     }
 
 
@@ -168,13 +179,10 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_player, menu);
-
         MenuItem searchItem = menu.findItem(R.id.search);
         mSearchView = (SearchView) searchItem.getActionView();
         mSearchView.setQueryHint("Search");
-
         mSearchView.setOnQueryTextListener(onQueryTextListener);
-
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -228,7 +236,7 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
         Log.v(TAG, "dispatchKeyEvent : KetEvent == " + event.getKeyCode());
-        switch (event.getKeyCode()){
+        switch (event.getKeyCode()) {
             //BackKey押下時はYouTubeSearchActivityに戻る
             case KeyEvent.KEYCODE_BACK:
                 Intent intent = new Intent(this, YouTubeSearchActivity.class);

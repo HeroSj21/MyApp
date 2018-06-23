@@ -1,11 +1,9 @@
 package com.youtube.application.youtubeapp;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public interface CallbackSearchAsyncTask {
 
-    void callbackSearchVideo(ArrayList<HashMap<String, String>> results);
-//    void callbackSearchVideo(String results);
-
+    void callbackSearchVideo(List<HashMap<String, String>> results);
 }

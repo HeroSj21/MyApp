@@ -9,8 +9,4 @@ public class StringContainer {
     public static final String KEY_VIDEO_THUMBNAILS = "THUMBNAILS";
 
     public static final String KEY_CHOSEN_VIDEO = "CHOSEN_VIDEO";
-
-    public static final int FRAGMENT_REPLACE = 1;
-    public static final int FRAGMENT_INITIAL = 0;
-
 }

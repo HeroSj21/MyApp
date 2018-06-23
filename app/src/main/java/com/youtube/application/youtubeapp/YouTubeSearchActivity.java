@@ -1,12 +1,14 @@
 package com.youtube.application.youtubeapp;
 
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class YouTubeSearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener {
 
+    static final String TAG = YouTubeSearchActivity.class.getSimpleName();
+
     private Toolbar mToolbar;
     private FragmentManager mFragmentManager;
     private FragmentTransaction mTransaction;
@@ -26,22 +30,30 @@ public class YouTubeSearchActivity extends AppCompatActivity implements SearchVi
     private SearchView mSearchView;
     private VideoSearchAsyncTask mSearchAsyncTask;
     private List<SearchResult> mResultList;
+    private VideoListFragment mVideoListFragment;
 
-    private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
+    private CallbackSearchAsyncTask mCallBackSearchVideo = new CallbackSearchAsyncTask() {
         @Override
-        public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
-            VideoListFragment videoListFragment = new VideoListFragment();
-            videoListFragment.setList(results);
+        public void callbackSearchVideo(List<HashMap<String, String>> results) {
+            mVideoListFragment = new VideoListFragment();
+            mVideoListFragment.setList(results);
+            //画像取得処理を行う
+            getBitmap(results);
+
+        }
+    };
+
+    private CallbackImageAsyncTask mCallbackImage = new CallbackImageAsyncTask() {
+        @Override
+        public void callbackImage(List<Bitmap> bitmap) {
+            Log.v(TAG, bitmap.toString());
+            mVideoListFragment.setBitmapList(bitmap);
             mFragmentManager = getSupportFragmentManager();
             mTransaction = mFragmentManager.beginTransaction();
             mTransaction.remove(mRequestFragment);
-            mTransaction.replace(R.id.search_video, videoListFragment)
+            mTransaction.replace(R.id.search_video, mVideoListFragment)
                     .commit();
         }
-//        @Override
-//        public void callbackSearchVideo(String s) {
-//            Toast.makeText(YouTubeSearchActivity.this, s, Toast.LENGTH_SHORT).show();
-
     };
 
     @Override
@@ -83,7 +95,7 @@ public class YouTubeSearchActivity extends AppCompatActivity implements SearchVi
         } else {
             //検索ボタンが呼ばれた時の処理
             mSearchAsyncTask = new VideoSearchAsyncTask();
-            mSearchAsyncTask.setCallback(mCallBack);
+            mSearchAsyncTask.setCallback(mCallBackSearchVideo);
             mSearchAsyncTask.setSearchWord(searchWord);
             mSearchAsyncTask.execute();
         }
@@ -93,5 +105,19 @@ public class YouTubeSearchActivity extends AppCompatActivity implements SearchVi
     @Override
     public boolean onQueryTextChange(String newText) {
         return false;
+    }
+
+    private void getBitmap(List<HashMap<String, String>> result) {
+        List<String> urlList = new ArrayList<>();
+        for (HashMap<String, String> map : result) {
+            String url = map.get(StringContainer.KEY_VIDEO_THUMBNAILS);
+            urlList.add(url);
+        }
+        Toast.makeText(this, urlList.toString(), Toast.LENGTH_SHORT).show();
+
+        ImageSearchAsyncTask imageSearchAsyncTask = new ImageSearchAsyncTask();
+        imageSearchAsyncTask.setCallback(mCallbackImage);
+        imageSearchAsyncTask.setUrlList(urlList);
+        imageSearchAsyncTask.execute();
     }
 }
