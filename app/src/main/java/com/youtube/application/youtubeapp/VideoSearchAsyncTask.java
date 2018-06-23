@@ -23,7 +23,6 @@ public class VideoSearchAsyncTask extends AsyncTask<String, String, ArrayList<Ha
     private static final long NUMBER_OF_VIDEOS_RETURNED = 15;
     private final static int NUM_VIDEO_INFO = 3;
 
-
     private YouTube mYoutube;
     private YouTube.Search.List mSearch;
     private HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
@@ -84,7 +83,7 @@ public class VideoSearchAsyncTask extends AsyncTask<String, String, ArrayList<Ha
         //
         mSearch = mYoutube.search().list("id,snippet");
         //YouTubeAPI Keyを設定
-        mSearch.setKey(YouTubeKeys.YOUTUBE_API_KEY);
+        mSearch.setKey(StringContainer.YOUTUBE_API_KEY);
         //
         mSearch.setType("video");
         //
@@ -99,11 +98,11 @@ public class VideoSearchAsyncTask extends AsyncTask<String, String, ArrayList<Ha
         for (SearchResult s : results) {
             HashMap<String, String> videoInfo = new HashMap<>();
             //タイトル
-            videoInfo.put(YouTubeKeys.KEY_VIDEO_TITLE, s.getSnippet().getTitle());
+            videoInfo.put(StringContainer.KEY_VIDEO_TITLE, s.getSnippet().getTitle());
             //VideoID
-            videoInfo.put(YouTubeKeys.KEY_VIDEO_ID, s.getId().getVideoId());
+            videoInfo.put(StringContainer.KEY_VIDEO_ID, s.getId().getVideoId());
             //サムネイルURL
-            videoInfo.put(YouTubeKeys.KEY_VIDEO_THUMBNAILS, s.getSnippet().getThumbnails().getDefault().getUrl());
+            videoInfo.put(StringContainer.KEY_VIDEO_THUMBNAILS, s.getSnippet().getThumbnails().getDefault().getUrl());
 
             list.add(videoInfo);
         }

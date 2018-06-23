@@ -2,12 +2,11 @@ package com.youtube.application.youtubeapp;
 
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +18,8 @@ import java.util.HashMap;
 import java.util.List;
 
 public class VideoListFragment extends Fragment implements AdapterView.OnItemClickListener{
+
+    private final static String TAG = VideoListFragment.class.getSimpleName();
 
     private View mView;
     private VideoListAdapter mAdapter;
@@ -49,11 +50,12 @@ public class VideoListFragment extends Fragment implements AdapterView.OnItemCli
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Log.v(TAG, "onItemClick Info == " + mAdapter.getItem(i));
         HashMap<String, String> videoInfo = mAdapter.getItem(i);
         Intent intent = new Intent(getActivity(), YouTubePlayerActivity.class);
-        intent.putExtra(YouTubeKeys.KEY_CHOSEN_VIDEO, videoInfo);
+        intent.putExtra(StringContainer.KEY_CHOSEN_VIDEO, videoInfo);
         startActivity(intent);
         getActivity().finish();
-        Toast.makeText(getActivity(), videoInfo.get(YouTubeKeys.KEY_VIDEO_TITLE), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), videoInfo.get(StringContainer.KEY_VIDEO_TITLE), Toast.LENGTH_SHORT).show();
     }
 }

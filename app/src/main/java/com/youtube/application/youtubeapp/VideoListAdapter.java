@@ -55,8 +55,8 @@ public class VideoListAdapter extends BaseAdapter {
         TextView titleText = (TextView) mView.findViewById(R.id.video_title);
 
         HashMap<String, String> videoInfo = getItem(position);
-        String title = videoInfo.get(YouTubeKeys.KEY_VIDEO_TITLE);
-//        String thumbnail = videoInfo.get(YouTubeKeys.KEY_VIDEO_THUMBNAILS);
+        String title = videoInfo.get(StringContainer.KEY_VIDEO_TITLE);
+//        String thumbnail = videoInfo.get(StringContainer.KEY_VIDEO_THUMBNAILS);
 
         titleText.setText(title);
 

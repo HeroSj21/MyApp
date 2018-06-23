@@ -27,4 +27,11 @@
         android:title="@string/search"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_settings"
+        android:title="@string/youtubesearchactivity"
+        android:orderInCategory="100"
+        app:showAsAction="never" />
+
 </menu>

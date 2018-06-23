@@ -3,12 +3,14 @@ package com.youtube.application.youtubeapp;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,6 +19,7 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerSupportFragment;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class YouTubePlayerActivity extends AppCompatActivity implements YouTubePlayer.OnInitializedListener, Toolbar.OnMenuItemClickListener {
@@ -30,7 +33,11 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
     private Toolbar mToolbar;
     private int mPlayState;
     private RequestSearchVideoFragment mRequestFragment;
+    private VideoListFragment mVideoListFragment;
     private SearchView mSearchView;
+    private VideoSearchAsyncTask mSearchAsyncTask;
+    private FragmentManager mFragmentManager;
+    private FragmentTransaction mTransaction;
 
     private final int PLAY = 0;
     private final int PAUSE = 1;
@@ -39,8 +46,12 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
     private SearchView.OnQueryTextListener onQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String searchWord) {
-            Log.v("SearchView", searchWord);
+            Log.v(TAG, "SearchView Word == " + searchWord);
             Toast.makeText(YouTubePlayerActivity.this, "Start Search!!", Toast.LENGTH_SHORT).show();
+            mSearchAsyncTask = new VideoSearchAsyncTask();
+            mSearchAsyncTask.setCallback(mCallBack);
+            mSearchAsyncTask.setSearchWord(searchWord);
+            mSearchAsyncTask.execute();
             return false;
         }
 
@@ -50,15 +61,36 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
         }
     };
 
+    private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
+        @Override
+        public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
+            Log.v(TAG, "callbackSearchVideo == " + results);
+            VideoListFragment videoListFragment = new VideoListFragment();
+            videoListFragment.setList(results);
+            mFragmentManager = getSupportFragmentManager();
+            mTransaction = mFragmentManager.beginTransaction();
+            mTransaction.remove(mRequestFragment);
+            mTransaction.replace(R.id.container, videoListFragment)
+                    .commit();
+        }
+//        @Override
+//        public void callbackSearchVideo(String s) {
+//            Toast.makeText(YouTubeSearchActivity.this, s, Toast.LENGTH_SHORT).show();
+
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Log.v(TAG, "onCreate start");
+
         Intent intent = getIntent();
-        mVideoInfo = (HashMap<String, String>) intent.getSerializableExtra(YouTubeKeys.KEY_CHOSEN_VIDEO);
+        mVideoInfo = (HashMap<String, String>) intent.getSerializableExtra(StringContainer.KEY_CHOSEN_VIDEO);
+        Log.v(TAG, "onCreate VideoInfo == " + mVideoInfo);
 
         if (mVideoInfo != null) {
-            mVideo_ID = mVideoInfo.get(YouTubeKeys.KEY_VIDEO_ID);
+            mVideo_ID = mVideoInfo.get(StringContainer.KEY_VIDEO_ID);
         }
         setContentView(R.layout.activity_you_tube_player);
 
@@ -72,15 +104,18 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
 
         //Fragment生成
         mRequestFragment = new RequestSearchVideoFragment();
+        mVideoListFragment = new VideoListFragment();
 
-        //FragmentManager生成
-        FragmentManager manager = getSupportFragmentManager();
-        // FragmentTransaction を開始
-        FragmentTransaction transaction = manager.beginTransaction();
-        // FragmentContainer のレイアウトに、 を割当てる
-        transaction.replace(R.id.container, mRequestFragment)
-                .addToBackStack(null)
-                .commit();
+        setFragment(mRequestFragment);
+
+//        //FragmentManager生成
+//        mFragmentManager = getSupportFragmentManager();
+//        // FragmentTransaction を開始
+//        mTransaction = mFragmentManager.beginTransaction();
+//        // FragmentContainer のレイアウトに、 を割当てる
+//        mTransaction.replace(R.id.container, mRequestFragment)
+//                .addToBackStack(null)
+//                .commit();
 
     }
 
@@ -90,6 +125,18 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
         YouTubePlayerSupportFragment frag =
                 (YouTubePlayerSupportFragment) getSupportFragmentManager().findFragmentById(R.id.youtube);
         frag.initialize(YOUTUBE_API_KEY, this);
+    }
+
+    private void setFragment(Fragment fragment){
+        //FragmentManager生成
+        mFragmentManager = getSupportFragmentManager();
+        // FragmentTransaction を開始
+        mTransaction = mFragmentManager.beginTransaction();
+
+        // FragmentContainer のレイアウトに、 を割当てる
+        mTransaction.replace(R.id.container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 
 
@@ -168,7 +215,28 @@ public class YouTubePlayerActivity extends AppCompatActivity implements YouTubeP
                 mYouTubePlayer.seekRelativeMillis(time30s);
                 Toast.makeText(YouTubePlayerActivity.this, "早送り!", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.action_settings:
+                Intent intent = new Intent(this, YouTubeSearchActivity.class);
+                startActivity(intent);
+                finish();
         }
         return true;
+    }
+
+
+    //ハードウェアキーを取得
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        Log.v(TAG, "dispatchKeyEvent : KetEvent == " + event.getKeyCode());
+        switch (event.getKeyCode()){
+            //BackKey押下時はYouTubeSearchActivityに戻る
+            case KeyEvent.KEYCODE_BACK:
+                Intent intent = new Intent(this, YouTubeSearchActivity.class);
+                startActivity(intent);
+                finish();
+                return true;
+        }
+
+        return super.dispatchKeyEvent(event);
     }
 }

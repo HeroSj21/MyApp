@@ -30,7 +30,6 @@ public class YouTubeSearchActivity extends AppCompatActivity implements SearchVi
     private CallbackSearchAsyncTask mCallBack = new CallbackSearchAsyncTask() {
         @Override
         public void callbackSearchVideo(ArrayList<HashMap<String, String>> results) {
-            Toast.makeText(YouTubeSearchActivity.this, results.toString(), Toast.LENGTH_SHORT).show();
             VideoListFragment videoListFragment = new VideoListFragment();
             videoListFragment.setList(results);
             mFragmentManager = getSupportFragmentManager();

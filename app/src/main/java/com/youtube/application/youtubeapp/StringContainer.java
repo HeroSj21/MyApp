@@ -1,6 +1,6 @@
 package com.youtube.application.youtubeapp;
 
-public class YouTubeKeys {
+public class StringContainer {
 
     public static final String YOUTUBE_API_KEY = "AIzaSyA8QLCTtt_IboYB6ebIdchMk_e0aAJd1_o";
 
@@ -10,7 +10,7 @@ public class YouTubeKeys {
 
     public static final String KEY_CHOSEN_VIDEO = "CHOSEN_VIDEO";
 
-    public static final String LOG_YOUTUBE_PLAYER_ACTIVITY = YouTubePlayerActivity.class.getSimpleName();
-    public static final String LOG_RESULT_FRAGMENT = VideoListFragment.class.getSimpleName();
+    public static final int FRAGMENT_REPLACE = 1;
+    public static final int FRAGMENT_INITIAL = 0;
 
 }
