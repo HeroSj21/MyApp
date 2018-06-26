@@ -22,7 +22,6 @@ public class VideoListAdapter extends BaseAdapter {
     private List<HashMap<String, String>> mVideoList;
     private List<Bitmap> mBitmapList;
     private View mView;
-    private Bitmap mBitmap;
     private ImageView mImageView;
 
     public VideoListAdapter(Context context, List<HashMap<String, String>> list, List<Bitmap> bitmapList) {
